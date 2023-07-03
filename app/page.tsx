@@ -1,17 +1,24 @@
-import { allPosts } from "@/.contentlayer/generated"
+import { notFound } from "next/navigation"
+import { allPages } from "@/.contentlayer/generated"
 import Link from "next/link"
+import { Mdx } from "@/components/mdx-components"
 
 export default function Home() {
+  const page = allPages.find((page) => page._id === "pages/home.mdx")
+
+  if (!page) {
+    return notFound()
+  }
+
   return (
     <div className="prose dark:prose-invert">
-      {allPosts.map((post) => (
-        <article key={post._id}>
-          <Link href={post.slug}>
-            <h2>{post.title}</h2>
-          </Link>
-          {post.description && <p>{post.description}</p>}
-        </article>
-      ))}
+      <article>
+        {/* <h2>{page.title}</h2> */}
+        <h3>{page.description}</h3>
+        <Mdx code={page.body.code} />
+      </article>
+
+      {/* <Link href="/list">List</Link> */}
     </div>
   )
 }
